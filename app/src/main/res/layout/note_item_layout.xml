@@ -3,22 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="60dp"
     android:layout_margin="4dp"
     android:elevation="12dp"
     app:cardCornerRadius="8dp">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="8dp">
 
-    <Button
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/edit_btn"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:background="@color/colorButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:src="@drawable/ic_edit"
-        android:layout_centerVertical="true"
+        android:layout_gravity="bottom|start"
+        app:fabSize="mini"
+        android:padding="16dp"
         android:layout_marginStart="10dp"/>
 
         <TextView

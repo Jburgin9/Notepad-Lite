@@ -1,4 +1,9 @@
 <resources>
     <string name="app_name">MVVMNotes</string>
     <string name="note_title">NOTE TITLE</string>
+    <string name="testing_text">TESTING</string>
+    <string name="enter_note">Enter Note</string>
+    <string name="time_ago">Time Ago</string>
+    <string name="delete_all_notes">Delete All Notes</string>
+    <string name="add_sample_data">Add Sample Data</string>
 </resources>

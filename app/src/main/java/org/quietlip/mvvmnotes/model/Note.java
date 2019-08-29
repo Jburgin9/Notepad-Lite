@@ -1,17 +1,22 @@
-package org.quietlip.mvvmnotes;
+package org.quietlip.mvvmnotes.model;
 
 import androidx.room.Entity;
+import androidx.room.Ignore;
+import androidx.room.PrimaryKey;
 
 import java.util.Date;
 
-@Entity
+@Entity(tableName = "notes")
 public class Note {
+    @PrimaryKey(autoGenerate = true)
     private int id;
     private Date date;
     private String text;
 
+    @Ignore
     public Note() {}
 
+    @Ignore
     public Note(Date date, String text) {
         this.date = date;
         this.text = text;

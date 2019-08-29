@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
@@ -38,6 +39,7 @@ public class EditorActivity extends AppCompatActivity {
     BottomSheetBehavior bottomSheetBehavior;
 
     private boolean newNote;
+    private boolean isBackPressed = false;
 
     @OnClick(R.id.save_note_option)
     void saveClickHandler(){
@@ -88,9 +90,14 @@ public class EditorActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        //make user double click to exit and give them warning to save or lose changes
-        saveNote();
-        finish();
+        if(isBackPressed){
+            //make user double click to exit and give them warning to save or lose changes
+            saveNote();
+            finish();
+        } else {
+            isBackPressed = true;
+            Toast.makeText(this, "press back again to save and leave", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void saveNote(){

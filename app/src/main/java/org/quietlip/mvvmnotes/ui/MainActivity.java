@@ -6,7 +6,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -14,10 +13,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
-import org.quietlip.mvvmnotes.viewmodel.MainViewModel;
-import org.quietlip.mvvmnotes.recyclerview.NotesAdapter;
 import org.quietlip.mvvmnotes.R;
 import org.quietlip.mvvmnotes.model.Note;
+import org.quietlip.mvvmnotes.recyclerview.NotesAdapter;
+import org.quietlip.mvvmnotes.viewmodel.MainViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,8 +31,8 @@ public class MainActivity extends AppCompatActivity {
     //Binding Views
     @BindView(R.id.recycler_view)
     RecyclerView recyclerView;
-    @BindView(R.id.main_toolbar)
-    Toolbar toolbar;
+//    @BindView(R.id.main_toolbar)
+//    Toolbar toolbar;
     @BindView(R.id.add_fab)
     FloatingActionButton addFab;
 
@@ -56,8 +55,8 @@ public class MainActivity extends AppCompatActivity {
         initRecyclerView();
         initViewModel();
 
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
     }
 

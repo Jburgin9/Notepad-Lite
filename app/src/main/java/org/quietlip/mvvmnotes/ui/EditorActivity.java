@@ -2,9 +2,10 @@ package org.quietlip.mvvmnotes.ui;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -20,8 +21,11 @@ public class EditorActivity extends AppCompatActivity {
     private static final String TAG = "JAFFY";
     private EditorViewModel editorViewModel;
 
-    @BindView(R.id.note_display_text_view)
-    TextView noteDisplayEt;
+    @BindView(R.id.note_display_edit_text)
+    EditText noteDisplayEt;
+
+    @BindView(R.id.editor_include_toolbar)
+    Toolbar toolbar;
 
     private boolean newNote;
 
@@ -29,6 +33,9 @@ public class EditorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("Editor");
+
         Log.d(TAG, "onCreate: ");
         ButterKnife.bind(this);
         initViewModel();

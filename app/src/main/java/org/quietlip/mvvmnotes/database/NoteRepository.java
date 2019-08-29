@@ -47,4 +47,10 @@ public class NoteRepository {
         return database.noteDao().getNotebyId(noteId);
     }
 
+    public void insertNote(Note note){
+        executor.execute(() ->{
+            database.noteDao().insertNote(note);
+        });
+    }
+
 }

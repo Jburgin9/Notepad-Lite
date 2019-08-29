@@ -12,20 +12,23 @@ public class Note {
     private int id;
     private Date date;
     private String text;
+    private String title;
 
     @Ignore
     public Note() {}
 
     @Ignore
-    public Note(Date date, String text) {
+    public Note(Date date, String text, String title) {
         this.date = date;
         this.text = text;
+        this.title = title;
     }
 
-    public Note(int id, Date date, String text) {
+    public Note(int id, Date date, String text, String title) {
         this.id = id;
         this.date = date;
         this.text = text;
+        this.title = title;
     }
 
     public int getId() {
@@ -50,6 +53,14 @@ public class Note {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     @Override

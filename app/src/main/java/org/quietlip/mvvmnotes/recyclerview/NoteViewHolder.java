@@ -17,7 +17,7 @@ public class NoteViewHolder extends RecyclerView.ViewHolder {
     @BindView(R.id.edit_btn)
     FloatingActionButton editBtn;
 
-    @BindView(R.id.note_title_tv)
+    @BindView(R.id.note_item_title_tv)
     TextView titleTv;
 
     @BindView(R.id.time_lapsed_tv)

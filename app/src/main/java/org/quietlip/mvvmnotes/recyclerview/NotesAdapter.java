@@ -41,7 +41,7 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         final Note note = notesList.get(position);
-        holder.titleTv.setText(note.getText());
+        holder.titleTv.setText(note.getTitle());
         DateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.US);
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         long postTime = note.getDate().getTime();

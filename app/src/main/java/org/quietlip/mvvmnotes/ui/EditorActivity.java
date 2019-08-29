@@ -1,6 +1,7 @@
 package org.quietlip.mvvmnotes.ui;
 
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -13,6 +14,8 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 
 import org.quietlip.mvvmnotes.R;
 import org.quietlip.mvvmnotes.model.Note;
@@ -36,6 +39,12 @@ public class EditorActivity extends AppCompatActivity {
     @BindView(R.id.save_note_option)
     MaterialButton saveNoteBtn;
 
+    @BindView(R.id.editor_note_title_et)
+    TextInputEditText noteTitleTv;
+
+    @BindView(R.id.text_input_layout)
+    TextInputLayout textInputLayout;
+
     BottomSheetBehavior bottomSheetBehavior;
 
     private boolean newNote;
@@ -46,6 +55,7 @@ public class EditorActivity extends AppCompatActivity {
         saveNote();
         //show animation during save and snackbar after success
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,13 +82,13 @@ public class EditorActivity extends AppCompatActivity {
                 if(note != null){
                     Log.d(TAG, "onChanged: " + note.getId());
                     noteDisplayEt.setText(note.getText());
+                    noteTitleTv.setText(note.getTitle());
                 }
             }
         });
 
         Bundle extras = getIntent().getExtras();
         if(extras == null){
-            setTitle("New note");
             newNote = true;
         } else {
             setTitle("Edit Note");
@@ -90,18 +100,23 @@ public class EditorActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(isBackPressed){
-            //make user double click to exit and give them warning to save or lose changes
+        if(!isBackPressed){
+            if (TextUtils.isEmpty(noteDisplayEt.getText().toString()) && TextUtils.isEmpty(noteTitleTv.getText().toString())){
+                finish();
+            } else {
+                //make user double click to exit and give them warning to save or lose changes
+                isBackPressed = true;
+                Toast.makeText(this, "press back again to save and leave", Toast.LENGTH_SHORT).show();
+            }
+        } else {
             saveNote();
             finish();
-        } else {
-            isBackPressed = true;
-            Toast.makeText(this, "press back again to save and leave", Toast.LENGTH_SHORT).show();
+
         }
     }
 
     public void saveNote(){
-        editorViewModel.saveNote(noteDisplayEt.getText().toString());
+        editorViewModel.saveNote(noteDisplayEt.getText().toString(), noteTitleTv.getText().toString());
     }
 
     private void actionBarSetup(){

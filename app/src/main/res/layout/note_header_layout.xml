@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+
+    <LinearLayout
+        android:id="@+id/header_lin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:weightSum="100">
+
+        <TextView
+            android:id="@+id/editor_note_title_tv"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="75"
+            android:hint="Note Title"
+            android:paddingStart="8dp"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Headline3" />
+
+        <TextView
+            android:id="@+id/last_updated_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="25"
+            android:gravity="bottom|end"
+            android:hint="Last Updated"
+            android:textAlignment="center"
+            android:textSize="14sp"
+            android:textStyle="italic" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/editor_lin_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@id/header_lin_layout">
+
+        <EditText
+            android:id="@+id/note_display_edit_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+           android:textAlignment="textStart"
+            android:hint="@string/enter_note"
+            android:inputType="textMultiLine"
+            android:textCursorDrawable="@null" />
+
+    </LinearLayout>
+
+</RelativeLayout>

@@ -7,23 +7,13 @@
     android:layout_height="match_parent"
     tools:context=".ui.EditorActivity">
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <include
-            android:id="@+id/editor_include_toolbar"
-            layout="@layout/main_toolbar" />
-
     <EditText
         android:id="@+id/note_display_edit_text"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="12dp"
         android:hint="@string/enter_note"
-        android:inputType="textMultiLine"
-        android:layout_below="@id/editor_include_toolbar"/>
+        android:inputType="textMultiLine" />
 
-    </RelativeLayout>
 
 </androidx.core.widget.NestedScrollView>

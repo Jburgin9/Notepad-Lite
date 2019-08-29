@@ -2,10 +2,12 @@ package org.quietlip.mvvmnotes.ui;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -24,8 +26,6 @@ public class EditorActivity extends AppCompatActivity {
     @BindView(R.id.note_display_edit_text)
     EditText noteDisplayEt;
 
-    @BindView(R.id.editor_include_toolbar)
-    Toolbar toolbar;
 
     private boolean newNote;
 
@@ -33,8 +33,10 @@ public class EditorActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setTitle("Editor");
+
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setIcon(R.drawable.ic_check_save_note);
+        actionBar.setDisplayShowTitleEnabled(false);
 
         Log.d(TAG, "onCreate: ");
         ButterKnife.bind(this);
@@ -66,8 +68,32 @@ public class EditorActivity extends AppCompatActivity {
             int noteId = extras.getInt(Constants.NOTE_ID_KEY);
             editorViewModel.loadData(noteId);
         }
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.save_option, menu);
+        return true;
+    }
 
-        
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.check_save_option:
+                saveNote();
+                return true;
+        }
+
+        return true;
+    }
+
+    @Override
+    public void onBackPressed() {
+        saveNote();
+        finish();
+    }
+
+    public void saveNote(){
+        editorViewModel.saveNote(noteDisplayEt.getText().toString());
     }
 }

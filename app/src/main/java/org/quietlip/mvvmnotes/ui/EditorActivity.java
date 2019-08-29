@@ -2,14 +2,16 @@ package org.quietlip.mvvmnotes.ui;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.view.View;
 import android.widget.EditText;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.button.MaterialButton;
 
 import org.quietlip.mvvmnotes.R;
 import org.quietlip.mvvmnotes.model.Note;
@@ -18,6 +20,7 @@ import org.quietlip.mvvmnotes.viewmodel.EditorViewModel;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class EditorActivity extends AppCompatActivity {
     private static final String TAG = "JAFFY";
@@ -26,24 +29,36 @@ public class EditorActivity extends AppCompatActivity {
     @BindView(R.id.note_display_edit_text)
     EditText noteDisplayEt;
 
+    @BindView(R.id.delete_note_option)
+    MaterialButton deleteNoteBtn;
+
+    @BindView(R.id.save_note_option)
+    MaterialButton saveNoteBtn;
+
+    BottomSheetBehavior bottomSheetBehavior;
 
     private boolean newNote;
+
+    @OnClick(R.id.save_note_option)
+    void saveClickHandler(){
+        saveNote();
+        //show animation during save and snackbar after success
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editor);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setIcon(R.drawable.ic_check_save_note);
-        actionBar.setDisplayShowTitleEnabled(false);
-
-        Log.d(TAG, "onCreate: ");
+        actionBarSetup();
         ButterKnife.bind(this);
         initViewModel();
-        //Toast.makeText(this, "editor activity", Toast.LENGTH_SHORT).show();
-    }
 
+        View bottomSheet = findViewById(R.id.editor_tray_bottom_sheet);
+        bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+    }
+//initViewModel
     private void initViewModel() {
         Log.d(TAG, "initViewModel: ");
         editorViewModel = ViewModelProviders.of(this)
@@ -70,30 +85,20 @@ public class EditorActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.save_option, menu);
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
-            case R.id.check_save_option:
-                saveNote();
-                return true;
-        }
-
-        return true;
-    }
 
     @Override
     public void onBackPressed() {
+        //make user double click to exit and give them warning to save or lose changes
         saveNote();
         finish();
     }
 
     public void saveNote(){
         editorViewModel.saveNote(noteDisplayEt.getText().toString());
+    }
+
+    private void actionBarSetup(){
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
     }
 }

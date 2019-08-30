@@ -5,10 +5,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -20,6 +20,7 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.quietlip.mvvmnotes.R;
 import org.quietlip.mvvmnotes.model.Note;
 import org.quietlip.mvvmnotes.utilis.Constants;
+import org.quietlip.mvvmnotes.utilis.Helper;
 import org.quietlip.mvvmnotes.viewmodel.EditorViewModel;
 
 import butterknife.BindView;
@@ -45,6 +46,9 @@ public class EditorActivity extends AppCompatActivity {
     @BindView(R.id.text_input_layout)
     TextInputLayout textInputLayout;
 
+    @BindView(R.id.editor_coordinator_layout)
+    CoordinatorLayout coordinatorLayout;
+
     BottomSheetBehavior bottomSheetBehavior;
 
     private boolean newNote;
@@ -68,6 +72,14 @@ public class EditorActivity extends AppCompatActivity {
 
         View bottomSheet = findViewById(R.id.editor_tray_bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        if(TextUtils.isEmpty(noteDisplayEt.getText().toString())){
+            deleteNoteBtn.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
+            saveNoteBtn.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
+        } else {
+            deleteNoteBtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+            saveNoteBtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
+        }
 
     }
 //initViewModel
@@ -106,7 +118,8 @@ public class EditorActivity extends AppCompatActivity {
             } else {
                 //make user double click to exit and give them warning to save or lose changes
                 isBackPressed = true;
-                Toast.makeText(this, "press back again to save and leave", Toast.LENGTH_SHORT).show();
+                Helper.makeSnackbar(coordinatorLayout, "Press back again to save & exit note");
+//                Toast.makeText(this, "press back again to save and leave", Toast.LENGTH_SHORT).show();
             }
         } else {
             saveNote();
@@ -116,6 +129,13 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     public void saveNote(){
+        /*
+        *Use helper to  make snackbar message for now. Look into RxJava to see if there is a way
+        * to call a method to make the database call and give back a result in an on complete. The
+        * on complete can be passed from the vm to the activity which would then result the message
+        * on either success or failure
+         */
+        Helper.makeSnackbar(coordinatorLayout, "Note saved");
         editorViewModel.saveNote(noteDisplayEt.getText().toString(), noteTitleTv.getText().toString());
     }
 

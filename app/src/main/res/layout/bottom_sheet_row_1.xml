@@ -34,6 +34,7 @@
             android:textColor="@android:color/black"
             app:icon="@drawable/ic_delete_note"
             app:iconGravity="start"
+            android:enabled="false"
             app:iconTint="@android:color/black" />
 
         <com.google.android.material.button.MaterialButton
@@ -45,8 +46,10 @@
             android:text="@string/save_note"
             android:textColor="@android:color/black"
             app:icon="@drawable/ic_check_save_note"
+            android:enabled="false"
             app:iconGravity="start"
             app:iconTint="@android:color/black" />
 
     </LinearLayout>
+
 </LinearLayout>

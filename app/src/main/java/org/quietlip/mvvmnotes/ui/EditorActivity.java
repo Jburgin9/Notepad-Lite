@@ -1,7 +1,9 @@
 package org.quietlip.mvvmnotes.ui;
 
 import android.os.Bundle;
+import android.text.Editable;
 import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -41,7 +43,7 @@ public class EditorActivity extends AppCompatActivity {
     MaterialButton saveNoteBtn;
 
     @BindView(R.id.editor_note_title_et)
-    TextInputEditText noteTitleTv;
+    TextInputEditText noteTitleEt;
 
     @BindView(R.id.text_input_layout)
     TextInputLayout textInputLayout;
@@ -55,7 +57,7 @@ public class EditorActivity extends AppCompatActivity {
     private boolean isBackPressed = false;
 
     @OnClick(R.id.save_note_option)
-    void saveClickHandler(){
+    void saveClickHandler() {
         saveNote();
         //show animation during save and snackbar after success
     }
@@ -69,20 +71,14 @@ public class EditorActivity extends AppCompatActivity {
         actionBarSetup();
         ButterKnife.bind(this);
         initViewModel();
+        listener();
 
         View bottomSheet = findViewById(R.id.editor_tray_bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
 
-        if(TextUtils.isEmpty(noteDisplayEt.getText().toString())){
-            deleteNoteBtn.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
-            saveNoteBtn.setBackgroundColor(getResources().getColor(android.R.color.darker_gray));
-        } else {
-            deleteNoteBtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-            saveNoteBtn.setBackgroundColor(getResources().getColor(R.color.colorPrimary));
-        }
-
     }
-//initViewModel
+
+    //initViewModel
     private void initViewModel() {
         Log.d(TAG, "initViewModel: ");
         editorViewModel = ViewModelProviders.of(this)
@@ -91,16 +87,16 @@ public class EditorActivity extends AppCompatActivity {
         editorViewModel.liveNote.observe(this, new Observer<Note>() {
             @Override
             public void onChanged(Note note) {
-                if(note != null){
+                if (note != null) {
                     Log.d(TAG, "onChanged: " + note.getId());
                     noteDisplayEt.setText(note.getText());
-                    noteTitleTv.setText(note.getTitle());
+                    noteTitleEt.setText(note.getTitle());
                 }
             }
         });
 
         Bundle extras = getIntent().getExtras();
-        if(extras == null){
+        if (extras == null) {
             newNote = true;
         } else {
             setTitle("Edit Note");
@@ -112,14 +108,15 @@ public class EditorActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        if(!isBackPressed){
-            if (TextUtils.isEmpty(noteDisplayEt.getText().toString()) && TextUtils.isEmpty(noteTitleTv.getText().toString())){
+        if (!isBackPressed) {
+            if (TextUtils.isEmpty(noteDisplayEt.getText().toString()) && TextUtils.isEmpty(noteTitleEt.getText().toString())) {
                 finish();
             } else {
                 //make user double click to exit and give them warning to save or lose changes
                 isBackPressed = true;
                 Helper.makeSnackbar(coordinatorLayout, "Press back again to save & exit note");
-//                Toast.makeText(this, "press back again to save and leave", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(this, "press back again to save and leave", Toast.LENGTH_SHORT)
+//                .show();
             }
         } else {
             saveNote();
@@ -128,19 +125,42 @@ public class EditorActivity extends AppCompatActivity {
         }
     }
 
-    public void saveNote(){
+    public void saveNote() {
         /*
-        *Use helper to  make snackbar message for now. Look into RxJava to see if there is a way
-        * to call a method to make the database call and give back a result in an on complete. The
-        * on complete can be passed from the vm to the activity which would then result the message
-        * on either success or failure
+         *Use helper to  make snackbar message for now. Look into RxJava to see if there is a way
+         * to call a method to make the database call and give back a result in an on complete. The
+         * on complete can be passed from the vm to the activity which would then result the message
+         * on either success or failure
          */
         Helper.makeSnackbar(coordinatorLayout, "Note saved");
-        editorViewModel.saveNote(noteDisplayEt.getText().toString(), noteTitleTv.getText().toString());
+        editorViewModel.saveNote(noteDisplayEt.getText().toString(),
+                noteTitleEt.getText().toString());
     }
 
-    private void actionBarSetup(){
+    private void actionBarSetup() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
+    }
+
+    private void listener() {
+        noteDisplayEt.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.d(TAG, "beforeTextChanged: ");
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.d(TAG, "onTextChanged: ");
+                    saveNoteBtn.setEnabled(!TextUtils.isEmpty(noteDisplayEt.getText().toString()) && !TextUtils.isEmpty(noteTitleEt.getText().toString()));
+                    deleteNoteBtn.setEnabled(!TextUtils.isEmpty(noteDisplayEt.getText().toString()) && !TextUtils.isEmpty(noteTitleEt.getText().toString()));
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.d(TAG, "afterTextChanged: ");
+
+            }
+        });
     }
 }

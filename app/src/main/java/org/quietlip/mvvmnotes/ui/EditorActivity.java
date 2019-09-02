@@ -59,7 +59,19 @@ public class EditorActivity extends AppCompatActivity {
     @OnClick(R.id.save_note_option)
     void saveClickHandler() {
         saveNote();
+        finish();
         //show animation during save and snackbar after success
+    }
+
+    @OnClick(R.id.delete_note_option)
+    void deleteClickHandler(){
+        if(TextUtils.isEmpty(noteDisplayEt.getText().toString()) &&
+                TextUtils.isEmpty(noteTitleEt.getText().toString())){
+            finish();
+        } else {
+            deleteNote();
+            finish();
+        }
     }
 
 
@@ -137,6 +149,14 @@ public class EditorActivity extends AppCompatActivity {
                 noteTitleEt.getText().toString());
     }
 
+    public void deleteNote(){
+        editorViewModel.deleteNote();
+
+        //Snackbar doesn't survive past Editor activity. Try implementing a coordinator layout
+        //in main activity
+        Helper.makeSnackbar(coordinatorLayout, "Note Deleted");
+    }
+
     private void actionBarSetup() {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setDisplayShowTitleEnabled(false);
@@ -147,7 +167,12 @@ public class EditorActivity extends AppCompatActivity {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 Log.d(TAG, "beforeTextChanged: ");
+
             }
+
+            /*
+            *Bug... it only takes note field for the buttons to be active
+             */
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -159,7 +184,13 @@ public class EditorActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 Log.d(TAG, "afterTextChanged: ");
-
+                if(s.length() > 0){
+                    saveNoteBtn.setEnabled(true);
+                    deleteNoteBtn.setEnabled(true);
+                } else {
+                    saveNoteBtn.setEnabled(false);
+                    deleteNoteBtn.setEnabled(false);
+                }
             }
         });
     }

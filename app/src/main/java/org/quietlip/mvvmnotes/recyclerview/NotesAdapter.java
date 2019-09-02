@@ -1,7 +1,6 @@
 package org.quietlip.mvvmnotes.recyclerview;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,8 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import org.quietlip.mvvmnotes.R;
 import org.quietlip.mvvmnotes.model.Note;
-import org.quietlip.mvvmnotes.ui.EditorActivity;
-import org.quietlip.mvvmnotes.utilis.Constants;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -42,18 +39,13 @@ public class NotesAdapter extends RecyclerView.Adapter<NoteViewHolder> {
     public void onBindViewHolder(@NonNull NoteViewHolder holder, int position) {
         final Note note = notesList.get(position);
         holder.titleTv.setText(note.getTitle());
-        DateFormat formatter = new SimpleDateFormat("HH:mm:ss", Locale.US);
+        DateFormat formatter = new SimpleDateFormat("HH:mm", Locale.US);
         formatter.setTimeZone(TimeZone.getTimeZone("UTC"));
         long postTime = note.getDate().getTime();
         int diff = (int) (System.currentTimeMillis() - postTime) + 1000;
         String text = formatter.format(new Date(diff));
-        holder.timeLapsedTv.setText("Posted " + diff + " ago" );
-
-        holder.editBtn.setOnClickListener(v -> {
-            Intent intent = new Intent(context, EditorActivity.class);
-            intent.putExtra(Constants.NOTE_ID_KEY, note.getId());
-            context.startActivity(intent);
-        });
+        holder.timeLapsedTv.setText("Posted " + text + " ago" );
+        holder.onBind(note);
     }
 
     @Override

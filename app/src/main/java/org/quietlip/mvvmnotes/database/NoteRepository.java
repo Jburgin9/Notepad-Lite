@@ -29,27 +29,34 @@ public class NoteRepository {
         return instance;
     }
 
-    private LiveData<List<Note>> getAllNotes(){
+    private LiveData<List<Note>> getAllNotes() {
         return database.noteDao().getAllNotes();
     }
 
-    public void addSampleData(){
+    public void addSampleData() {
         executor.execute(() ->
                 database.noteDao().insertNotes(SampleData.getNotes()));
     }
 
-    public void deleteAllNotes(){
+    public void deleteAllNotes() {
         executor.execute(() ->
                 database.noteDao().deleteAll());
     }
 
-    public Note getNoteById(int noteId){
+    public Note getNoteById(int noteId) {
         return database.noteDao().getNotebyId(noteId);
     }
 
-    public void insertNote(Note note){
-        executor.execute(() ->{
-            database.noteDao().insertNote(note);
+    public void insertNote(Note note) {
+        executor.execute(() -> database.noteDao().insertNote(note));
+    }
+
+    public void deleteNote(Note note) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                database.noteDao().deleteNote(note);
+            }
         });
     }
 

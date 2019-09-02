@@ -31,7 +31,7 @@
                 android:background="@color/colorButton"
                 android:paddingStart="8dp"
                 android:maxLines="1"
-                android:inputType="text" />
+                android:inputType="text|textCapSentences" />
 
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -49,22 +49,5 @@
 
     </LinearLayout>
 
-    <LinearLayout
-        android:id="@+id/editor_lin_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:layout_below="@id/header_lin_layout">
-
-        <EditText
-            android:id="@+id/note_display_edit_text"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-           android:textAlignment="textStart"
-            android:hint="@string/enter_note"
-            android:inputType="textMultiLine"
-            android:textCursorDrawable="@null" />
-
-    </LinearLayout>
 
 </RelativeLayout>

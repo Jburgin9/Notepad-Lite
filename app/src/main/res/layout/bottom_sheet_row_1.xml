@@ -33,9 +33,10 @@
             android:text="@string/delete_note"
             android:textColor="@android:color/black"
             app:icon="@drawable/ic_delete_note"
+            app:iconTint="@android:color/black"
             app:iconGravity="start"
             android:enabled="false"
-            app:iconTint="@android:color/black" />
+            android:inputType="textCapSentences" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/save_note_option"

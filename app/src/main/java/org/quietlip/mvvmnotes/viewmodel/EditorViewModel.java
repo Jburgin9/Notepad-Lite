@@ -1,5 +1,6 @@
 package org.quietlip.mvvmnotes.viewmodel;
 
+import android.app.Activity;
 import android.app.Application;
 import android.text.TextUtils;
 
@@ -9,6 +10,7 @@ import androidx.lifecycle.MutableLiveData;
 
 import org.quietlip.mvvmnotes.database.NoteRepository;
 import org.quietlip.mvvmnotes.model.Note;
+import org.quietlip.mvvmnotes.ui.EditorActivity;
 
 import java.util.Date;
 import java.util.concurrent.Executor;
@@ -49,8 +51,9 @@ public class EditorViewModel extends AndroidViewModel {
         repository.insertNote(note);
     }
 
-    public void deleteNote(){
+    public void deleteNote() {
         repository.deleteNote(liveNote.getValue());
+        Activity activity = new EditorActivity();
     }
 
 }

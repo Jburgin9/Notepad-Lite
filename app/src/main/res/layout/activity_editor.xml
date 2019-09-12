@@ -12,7 +12,6 @@
         android:id="@+id/header_include"
         layout="@layout/note_header_layout" />
 
-
     <EditText
         android:id="@+id/note_display_edit_text"
         android:layout_width="match_parent"
@@ -21,11 +20,10 @@
         android:inputType="textMultiLine|textCapSentences"
         android:textCursorDrawable="@null"
         android:layout_marginStart="12dp"
-        android:layout_marginTop="100dp"
         android:background="@null"
         app:layout_anchor="@id/header_include"
         app:layout_anchorGravity="bottom"
-        android:layout_gravity="bottom"/>
+        android:layout_gravity="bottom" />
 
 
     <androidx.core.widget.NestedScrollView

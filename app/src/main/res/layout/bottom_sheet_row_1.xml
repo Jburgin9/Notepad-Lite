@@ -29,7 +29,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginRight="4dp"
-            android:layout_weight="50"
+            android:layout_weight="33"
             android:text="@string/delete_note"
             android:textColor="@android:color/black"
             app:icon="@drawable/ic_delete_note"
@@ -43,11 +43,24 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginLeft="4dp"
-            android:layout_weight="50"
+            android:layout_weight="33"
             android:text="@string/save_note"
             android:textColor="@android:color/black"
             app:icon="@drawable/ic_check_save_note"
             android:enabled="false"
+            app:iconGravity="start"
+            app:iconTint="@android:color/black" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bold_text_option"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="4dp"
+            android:layout_weight="33"
+            android:text="B"
+            android:textColor="@android:color/black"
+            app:icon="@drawable/ic_check_save_note"
+            android:backgroundTint="@android:color/darker_gray"
             app:iconGravity="start"
             app:iconTint="@android:color/black" />
 

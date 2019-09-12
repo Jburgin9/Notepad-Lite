@@ -1,9 +1,11 @@
 package org.quietlip.mvvmnotes.ui;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
+import android.text.style.StyleSpan;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -25,9 +27,14 @@ import org.quietlip.mvvmnotes.utilis.Constants;
 import org.quietlip.mvvmnotes.utilis.Helper;
 import org.quietlip.mvvmnotes.viewmodel.EditorViewModel;
 
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+//TODO Auto save feature for notes, so even if the app crashes, after every keystroke it auto saves
 
 public class EditorActivity extends AppCompatActivity {
     private static final String TAG = "JAFFY";
@@ -42,6 +49,9 @@ public class EditorActivity extends AppCompatActivity {
     @BindView(R.id.save_note_option)
     MaterialButton saveNoteBtn;
 
+    @BindView(R.id.bold_text_option)
+    MaterialButton boldTextBtn;
+
     @BindView(R.id.editor_note_title_et)
     TextInputEditText noteTitleEt;
 
@@ -55,6 +65,7 @@ public class EditorActivity extends AppCompatActivity {
 
     private boolean newNote;
     private boolean isBackPressed = false;
+    private Executor executor = Executors.newSingleThreadExecutor();
 
     @OnClick(R.id.save_note_option)
     void saveClickHandler() {
@@ -64,14 +75,20 @@ public class EditorActivity extends AppCompatActivity {
     }
 
     @OnClick(R.id.delete_note_option)
-    void deleteClickHandler(){
-        if(TextUtils.isEmpty(noteDisplayEt.getText().toString()) &&
-                TextUtils.isEmpty(noteTitleEt.getText().toString())){
+    void deleteClickHandler() {
+        if (TextUtils.isEmpty(noteDisplayEt.getText().toString()) &&
+                TextUtils.isEmpty(noteTitleEt.getText().toString())) {
             finish();
         } else {
             deleteNote();
             finish();
         }
+    }
+
+    @OnClick(R.id.bold_text_option)
+    void boldTextHandler() {
+        Log.d(TAG, "boldTextHandler: ");
+
     }
 
 
@@ -83,10 +100,42 @@ public class EditorActivity extends AppCompatActivity {
         actionBarSetup();
         ButterKnife.bind(this);
         initViewModel();
-        listener();
+        // listener();
 
         View bottomSheet = findViewById(R.id.editor_tray_bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
+
+        TextWatcher textWatcher = new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                SpannableString str = new SpannableString(s);
+//                Log.d(TAG, "boldOnTextChanged: " + str);
+//                StyleSpan ss = new StyleSpan(Typeface.BOLD);
+//                int endOfString = str.length();
+//                str.setSpan(ss, noteDisplayEt.getSelectionStart(), endOfString, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+//                Log.d(TAG, "stringBold: " + str);
+                Log.d(TAG, "onTextChanged: autosave");
+                executor.execute(new Runnable() {
+                    @Override
+                    public void run() {
+                        saveNote();
+                    }
+                });
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                StyleSpan ss = new StyleSpan(Typeface.BOLD);
+                int endOfString = s.length();
+//                s.setSpan(ss, noteDisplayEt.getSelectionStart(), endOfString, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        };
+        noteDisplayEt.addTextChangedListener(textWatcher);
 
     }
 
@@ -149,7 +198,7 @@ public class EditorActivity extends AppCompatActivity {
                 noteTitleEt.getText().toString());
     }
 
-    public void deleteNote(){
+    public void deleteNote() {
         editorViewModel.deleteNote();
 
         //Snackbar doesn't survive past Editor activity. Try implementing a coordinator layout
@@ -157,34 +206,29 @@ public class EditorActivity extends AppCompatActivity {
         Helper.makeSnackbar(coordinatorLayout, "Note Deleted");
     }
 
-    private void actionBarSetup() {
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayShowTitleEnabled(false);
-    }
 
     private void listener() {
-        noteDisplayEt.addTextChangedListener(new TextWatcher() {
-            @Override
+        TextWatcher enableSaveAndDelete = new TextWatcher() {
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
                 Log.d(TAG, "beforeTextChanged: ");
 
             }
 
             /*
-            *Bug... it only takes note field for the buttons to be active
+             *Bug... it only takes note field for the buttons to be active
              */
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 Log.d(TAG, "onTextChanged: ");
-                    saveNoteBtn.setEnabled(!TextUtils.isEmpty(noteDisplayEt.getText().toString()) && !TextUtils.isEmpty(noteTitleEt.getText().toString()));
-                    deleteNoteBtn.setEnabled(!TextUtils.isEmpty(noteDisplayEt.getText().toString()) && !TextUtils.isEmpty(noteTitleEt.getText().toString()));
+                saveNoteBtn.setEnabled(!TextUtils.isEmpty(noteDisplayEt.getText().toString()) && !TextUtils.isEmpty(noteTitleEt.getText().toString()));
+                deleteNoteBtn.setEnabled(!TextUtils.isEmpty(noteDisplayEt.getText().toString()) && !TextUtils.isEmpty(noteTitleEt.getText().toString()));
             }
 
             @Override
             public void afterTextChanged(Editable s) {
                 Log.d(TAG, "afterTextChanged: ");
-                if(s.length() > 0){
+                if (s.length() > 0) {
                     saveNoteBtn.setEnabled(true);
                     deleteNoteBtn.setEnabled(true);
                 } else {
@@ -192,6 +236,14 @@ public class EditorActivity extends AppCompatActivity {
                     deleteNoteBtn.setEnabled(false);
                 }
             }
-        });
+        };
+
+        noteDisplayEt.addTextChangedListener(enableSaveAndDelete);
     }
+
+    private void actionBarSetup() {
+        ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayShowTitleEnabled(false);
+    }
+
 }

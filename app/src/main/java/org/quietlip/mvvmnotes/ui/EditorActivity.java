@@ -12,7 +12,6 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -24,7 +23,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import org.quietlip.mvvmnotes.R;
 import org.quietlip.mvvmnotes.model.Note;
 import org.quietlip.mvvmnotes.utilis.Constants;
-import org.quietlip.mvvmnotes.utilis.Helper;
 import org.quietlip.mvvmnotes.viewmodel.EditorViewModel;
 
 import java.util.concurrent.Executor;
@@ -58,8 +56,8 @@ public class EditorActivity extends AppCompatActivity {
     @BindView(R.id.text_input_layout)
     TextInputLayout textInputLayout;
 
-    @BindView(R.id.editor_coordinator_layout)
-    CoordinatorLayout coordinatorLayout;
+//    @BindView(R.id.editor_coordinator_layout)
+//    CoordinatorLayout coordinatorLayout;
 
     BottomSheetBehavior bottomSheetBehavior;
 
@@ -175,7 +173,7 @@ public class EditorActivity extends AppCompatActivity {
             } else {
                 //make user double click to exit and give them warning to save or lose changes
                 isBackPressed = true;
-                Helper.makeSnackbar(coordinatorLayout, "Press back again to save & exit note");
+//                Helper.makeSnackbar(coordinatorLayout, "Press back again to save & exit note");
 //                Toast.makeText(this, "press back again to save and leave", Toast.LENGTH_SHORT)
 //                .show();
             }
@@ -193,7 +191,7 @@ public class EditorActivity extends AppCompatActivity {
          * on complete can be passed from the vm to the activity which would then result the message
          * on either success or failure
          */
-        Helper.makeSnackbar(coordinatorLayout, "Note saved");
+//        Helper.makeSnackbar(coordinatorLayout, "Note saved");
         editorViewModel.saveNote(noteDisplayEt.getText().toString(),
                 noteTitleEt.getText().toString());
     }
@@ -203,7 +201,7 @@ public class EditorActivity extends AppCompatActivity {
 
         //Snackbar doesn't survive past Editor activity. Try implementing a coordinator layout
         //in main activity
-        Helper.makeSnackbar(coordinatorLayout, "Note Deleted");
+//        Helper.makeSnackbar(coordinatorLayout, "Note Deleted");
     }
 
 

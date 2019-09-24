@@ -1,5 +1,6 @@
 package org.quietlip.mvvmnotes.ui;
 
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,9 +26,6 @@ import org.quietlip.mvvmnotes.model.Note;
 import org.quietlip.mvvmnotes.utilis.Constants;
 import org.quietlip.mvvmnotes.viewmodel.EditorViewModel;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -50,6 +48,9 @@ public class EditorActivity extends AppCompatActivity {
     @BindView(R.id.bold_text_option)
     MaterialButton boldTextBtn;
 
+    @BindView(R.id.share_option)
+    MaterialButton shareBtn;
+
     @BindView(R.id.editor_note_title_et)
     TextInputEditText noteTitleEt;
 
@@ -63,7 +64,6 @@ public class EditorActivity extends AppCompatActivity {
 
     private boolean newNote;
     private boolean isBackPressed = false;
-    private Executor executor = Executors.newSingleThreadExecutor();
 
     @OnClick(R.id.save_note_option)
     void saveClickHandler() {
@@ -71,6 +71,7 @@ public class EditorActivity extends AppCompatActivity {
         finish();
         //show animation during save and snackbar after success
     }
+
 
     @OnClick(R.id.delete_note_option)
     void deleteClickHandler() {
@@ -89,6 +90,16 @@ public class EditorActivity extends AppCompatActivity {
 
     }
 
+    @OnClick(R.id.share_option)
+    void shareNote(){
+        Intent sendIntent = new Intent();
+        sendIntent.setAction(Intent.ACTION_SEND);
+        sendIntent.putExtra(Intent.EXTRA_TEXT, noteDisplayEt.getText().toString());
+        sendIntent.setType("text/plain");
+        Intent shareIntent = Intent.createChooser(sendIntent, null);
+        startActivity(shareIntent);
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,7 +109,7 @@ public class EditorActivity extends AppCompatActivity {
         actionBarSetup();
         ButterKnife.bind(this);
         initViewModel();
-        // listener();
+         listener();
 
         View bottomSheet = findViewById(R.id.editor_tray_bottom_sheet);
         bottomSheetBehavior = BottomSheetBehavior.from(bottomSheet);
@@ -118,12 +129,6 @@ public class EditorActivity extends AppCompatActivity {
 //                str.setSpan(ss, noteDisplayEt.getSelectionStart(), endOfString, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
 //                Log.d(TAG, "stringBold: " + str);
                 Log.d(TAG, "onTextChanged: autosave");
-                executor.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        saveNote();
-                    }
-                });
             }
 
             @Override

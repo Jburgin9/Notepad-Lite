@@ -1,4 +1,8 @@
 # Notepad Lite
 
-This app is made to take notes from the users and store it on the users phone using and SQL database.
-The app will allow the user to add, save & delete notes, send notes, format their text
+This note-taking application will allow users to create, and delete notes as well as save a note to the phone's internal storage.
+
+The app uses the listed technologies:
+Room
+RecyclerView
+Dagger

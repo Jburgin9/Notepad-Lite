@@ -4,5 +4,6 @@ This note-taking application will allow users to create, and delete notes as wel
 
 The app uses the listed technologies:
 Room,
-RecyclerView &
-Dagger
+ViewModel
+LiveData &
+RecyclerView 

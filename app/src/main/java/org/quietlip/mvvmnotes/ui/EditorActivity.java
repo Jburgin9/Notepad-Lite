@@ -75,7 +75,7 @@ public class EditorActivity extends AppCompatActivity {
 
     @OnClick(R.id.delete_note_option)
     void deleteClickHandler() {
-        if (TextUtils.isEmpty(noteDisplayEt.getText().toString()) &&
+        if (TextUtils.isEmpty(noteDisplayEt.getText().toString()) ||
                 TextUtils.isEmpty(noteTitleEt.getText().toString())) {
             finish();
         } else {
@@ -122,24 +122,21 @@ public class EditorActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                SpannableString str = new SpannableString(s);
-//                Log.d(TAG, "boldOnTextChanged: " + str);
-//                StyleSpan ss = new StyleSpan(Typeface.BOLD);
-//                int endOfString = str.length();
-//                str.setSpan(ss, noteDisplayEt.getSelectionStart(), endOfString, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-//                Log.d(TAG, "stringBold: " + str);
-                Log.d(TAG, "onTextChanged: autosave");
+//                SpannableString string = new SpannableString(s);
+//                StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
+//                string.setSpan(boldSpan, start, start + count, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                StyleSpan ss = new StyleSpan(Typeface.BOLD);
-                int endOfString = s.length();
-//                s.setSpan(ss, noteDisplayEt.getSelectionStart(), endOfString, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                StyleSpan boldSpan = new StyleSpan(Typeface.BOLD);
+                int boldStart = s.getSpanStart(boldSpan);
+                int boldEnd = s.getSpanEnd(boldSpan);
+
             }
         };
         noteDisplayEt.addTextChangedListener(textWatcher);
-
     }
 
     //initViewModel
